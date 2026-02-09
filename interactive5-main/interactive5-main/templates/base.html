@@ -1,0 +1,1366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Interactive Generative Studio{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #2d3748;
+        }
+
+        nav {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 1.2rem 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            padding: 0.65rem 1.2rem;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        nav a:hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .logo {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            margin-right: auto;
+            letter-spacing: -0.5px;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 2.5rem auto;
+            padding: 2.5rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: #667eea;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        h2 {
+            color: #764ba2;
+            margin: 2rem 0 1rem 0;
+            font-weight: 700;
+        }
+
+        h3 {
+            color: #667eea;
+            margin: 1.5rem 0;
+            font-weight: 600;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.85rem 2rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78, #38a169);
+            box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 8px 25px rgba(72, 187, 120, 0.5);
+        }
+
+        .control-panel {
+            background: linear-gradient(135deg, #f7fafc, #edf2f7);
+            padding: 2.5rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            border: 2px solid #e2e8f0;
+        }
+
+        .control-group {
+            margin-bottom: 1.8rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 700;
+            color: #2d3748;
+            font-size: 1rem;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #cbd5e0;
+            outline: none;
+            margin: 0.7rem 0;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.85rem;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        select {
+            padding: 0.85rem;
+            border: 2px solid #cbd5e0;
+            border-radius: 10px;
+            width: 100%;
+            font-size: 1rem;
+            cursor: pointer;
+            background: white;
+            transition: border 0.3s;
+        }
+
+        select:focus {
+            border-color: #667eea;
+            outline: none;
+        }
+
+        input[type="file"] {
+            padding: 0.85rem;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            width: 100%;
+            cursor: pointer;
+            background: #f7fafc;
+            transition: all 0.3s;
+        }
+
+        input[type="file"]:hover {
+            border-color: #667eea;
+            background: #edf2f7;
+        }
+
+        .image-container {
+            text-align: center;
+            margin-top: 2.5rem;
+            background: #f7fafc;
+            padding: 2.5rem;
+            border-radius: 15px;
+        }
+
+        .image-container img {
+            max-width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .image-box {
+            background: #f7fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e2e8f0;
+        }
+
+        .image-box h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .image-box img {
+            max-width: 100%;
+            border-radius: 12px;
+        }
+
+        .placeholder {
+            padding: 5rem 2rem;
+            background: #edf2f7;
+            border-radius: 12px;
+            color: #a0aec0;
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            padding: 2.5rem;
+            margin-top: 3rem;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+            margin-top: 1.2rem;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #ebf4ff, #e0e7ff);
+            border-left: 5px solid #667eea;
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 12px;
+        }
+
+        .info-box p {
+            line-height: 1.8;
+            color: #2d3748;
+        }
+
+        .info-box ul {
+            margin-left: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .image-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 0.5rem;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            nav {
+                padding: 1rem 1.5rem;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav>
+        <ul>
+            <li class="logo">🎨 GenStudio</li>
+            <li><a href="/">Home</a></li>
+            <li><a href="/generative">Generative Art</a></li>
+            <li><a href="/data-viz">Data Viz</a></li>
+            <li><a href="/image-processor">Image FX</a></li>
+            <li><a href="/audio-processor">Audio FX</a></li>
+            <li><a href="/style-transfer">Style Transfer (ML)</a></li>
+            <li><a href="/gallery">Gallery</a></li>
+        </ul>
+
+    </nav>
+    <!-- Ajoutez ce code APRÈS la balise </nav> dans base.html -->
+
+<style>
+/* ========== AMÉLIORATIONS UX ========== */
+
+/* Breadcrumbs navigation */
+.breadcrumbs {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1rem 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.breadcrumbs a {
+    color: #667eea;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.breadcrumbs a:hover {
+    color: #764ba2;
+}
+
+.breadcrumbs .separator {
+    color: #a0aec0;
+}
+
+.breadcrumbs .current {
+    color: #2d3748;
+    font-weight: 600;
+}
+
+/* Quick actions floating button */
+.quick-actions {
+    position: fixed;
+    bottom: 100px;
+    right: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 999;
+}
+
+.quick-action-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    border: 2px solid #667eea;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.quick-action-btn:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.quick-action-tooltip {
+    position: absolute;
+    right: 65px;
+    background: #2d3748;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    white-space: nowrap;
+    font-size: 0.85rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.quick-action-btn:hover .quick-action-tooltip {
+    opacity: 1;
+}
+
+/* Help overlay */
+.help-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 10000;
+    padding: 2rem;
+    overflow-y: auto;
+}
+
+.help-overlay.active {
+    display: block;
+}
+
+.help-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 3rem;
+    position: relative;
+}
+
+.help-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #a0aec0;
+}
+
+.help-close:hover {
+    color: #667eea;
+}
+
+/* Keyboard shortcuts indicator */
+.keyboard-shortcuts {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    font-size: 0.85rem;
+    z-index: 998;
+}
+
+.keyboard-shortcuts h4 {
+    margin: 0 0 0.5rem 0;
+    color: #667eea;
+    font-size: 0.9rem;
+}
+
+.shortcut {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.3rem 0;
+}
+
+.key {
+    background: #edf2f7;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: 600;
+}
+
+/* Preview modal for images before upload */
+.preview-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10001;
+    padding: 2rem;
+}
+
+.preview-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview-content {
+    max-width: 90%;
+    max-height: 90%;
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    position: relative;
+}
+
+.preview-image {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+}
+
+.preview-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    justify-content: center;
+}
+
+/* Status indicator */
+.status-indicator {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #48bb78;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    display: none;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 9999;
+    box-shadow: 0 4px 15px rgba(72, 187, 120, 0.4);
+}
+
+.status-indicator.active {
+    display: flex;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateX(-50%) translateY(-100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.status-indicator.error {
+    background: #f56565;
+}
+
+.status-indicator.warning {
+    background: #ed8936;
+}
+
+/* Drag and drop zone enhancement */
+input[type="file"] {
+    position: relative;
+}
+
+.file-drop-zone {
+    border: 3px dashed #cbd5e0;
+    border-radius: 15px;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: #f7fafc;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.file-drop-zone:hover,
+.file-drop-zone.dragover {
+    border-color: #667eea;
+    background: #edf2f7;
+    transform: scale(1.02);
+}
+
+.file-drop-zone.dragover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+}
+
+/* Undo/Redo buttons */
+.history-controls {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.history-btn {
+    padding: 0.5rem 1rem;
+    background: #edf2f7;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    color: #4a5568;
+    transition: all 0.2s;
+}
+
+.history-btn:hover:not(:disabled) {
+    background: #667eea;
+    color: white;
+}
+
+.history-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* Smart suggestions */
+.suggestions {
+    background: #ebf4ff;
+    border-left: 4px solid #667eea;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+}
+
+.suggestions h4 {
+    margin: 0 0 0.5rem 0;
+    color: #667eea;
+}
+
+.suggestion-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.chip {
+    background: white;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 2px solid transparent;
+}
+
+.chip:hover {
+    border-color: #667eea;
+    transform: translateY(-2px);
+}
+</style>
+
+<!-- Status Indicator -->
+<div class="status-indicator" id="statusIndicator">
+    <span class="status-icon">✅</span>
+    <span class="status-text">Ready</span>
+</div>
+
+<!-- Breadcrumbs (dynamique selon la page) -->
+<div class="breadcrumbs">
+    <a href="/">🏠 Home</a>
+    <span class="separator">›</span>
+    <span class="current" id="currentPage">Dashboard</span>
+</div>
+
+<!-- Quick Actions Floating Menu -->
+<div class="quick-actions">
+    <button class="quick-action-btn" onclick="scrollToTop()" title="Back to top">
+        <span class="quick-action-tooltip">Back to Top</span>
+        ⬆️
+    </button>
+    <button class="quick-action-btn" onclick="toggleHelp()" title="Help">
+        <span class="quick-action-tooltip">Keyboard Shortcuts</span>
+        ❓
+    </button>
+    <button class="quick-action-btn" onclick="window.location.href='/gallery'" title="Gallery">
+        <span class="quick-action-tooltip">View Gallery</span>
+        🎭
+    </button>
+    <button class="quick-action-btn" onclick="window.history.back()" title="Go back">
+        <span class="quick-action-tooltip">Go Back</span>
+        ⬅️
+    </button>
+</div>
+
+<!-- Help Overlay -->
+<div class="help-overlay" id="helpOverlay">
+    <div class="help-content">
+        <button class="help-close" onclick="toggleHelp()">×</button>
+        <h2 style="color: #667eea; margin-bottom: 1.5rem;">⌨️ Keyboard Shortcuts</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+            <div>
+                <h4 style="color: #2d3748; margin-bottom: 1rem;">Navigation</h4>
+                <div class="shortcut"><span><kbd>Ctrl</kbd> + <kbd>H</kbd></span> <span>Home</span></div>
+                <div class="shortcut"><span><kbd>Ctrl</kbd> + <kbd>G</kbd></span> <span>Gallery</span></div>
+                <div class="shortcut"><span><kbd>Esc</kbd></span> <span>Close Modal</span></div>
+                <div class="shortcut"><span><kbd>Alt</kbd> + <kbd>←</kbd></span> <span>Go Back</span></div>
+            </div>
+            
+            <div>
+                <h4 style="color: #2d3748; margin-bottom: 1rem;">Actions</h4>
+                <div class="shortcut"><span><kbd>Ctrl</kbd> + <kbd>Enter</kbd></span> <span>Submit Form</span></div>
+                <div class="shortcut"><span><kbd>Ctrl</kbd> + <kbd>S</kbd></span> <span>Download</span></div>
+                <div class="shortcut"><span><kbd>Space</kbd></span> <span>Play/Pause Audio</span></div>
+                <div class="shortcut"><span><kbd>?</kbd></span> <span>Show Help</span></div>
+            </div>
+        </div>
+        
+        <p style="margin-top: 2rem; color: #718096; text-align: center;">
+            Press <kbd>?</kbd> anytime to see this help
+        </p>
+    </div>
+</div>
+
+<script>
+// ========== AMÉLIORATIONS UX ==========
+
+// 1. Update breadcrumbs dynamically
+function updateBreadcrumbs() {
+    const path = window.location.pathname;
+    const pageName = {
+        '/': 'Home',
+        '/generative': 'Generative Art',
+        '/data-viz': 'Data Visualization',
+        '/image-processor': 'Image Processing',
+        '/audio-processor': 'Audio Processing',
+        '/style-transfer': 'Style Transfer',
+        '/gallery': 'Gallery'
+    };
+    
+    const currentPage = document.getElementById('currentPage');
+    if (currentPage) {
+        currentPage.textContent = pageName[path] || 'Dashboard';
+    }
+}
+
+// 2. Scroll to top smoothly
+function scrollToTop() {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+}
+
+// 3. Toggle help overlay
+function toggleHelp() {
+    const helpOverlay = document.getElementById('helpOverlay');
+    helpOverlay.classList.toggle('active');
+}
+
+// 4. Status indicator functions
+function showStatus(message, type = 'success') {
+    const indicator = document.getElementById('statusIndicator');
+    const icon = indicator.querySelector('.status-icon');
+    const text = indicator.querySelector('.status-text');
+    
+    // Reset classes
+    indicator.className = 'status-indicator active';
+    
+    // Set type
+    if (type === 'error') {
+        indicator.classList.add('error');
+        icon.textContent = '❌';
+    } else if (type === 'warning') {
+        indicator.classList.add('warning');
+        icon.textContent = '⚠️';
+    } else {
+        icon.textContent = '✅';
+    }
+    
+    text.textContent = message;
+    
+    // Auto hide after 3s
+    setTimeout(() => {
+        indicator.classList.remove('active');
+    }, 3000);
+}
+
+// 5. Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Ctrl + H = Home
+    if (e.ctrlKey && e.key === 'h') {
+        e.preventDefault();
+        window.location.href = '/';
+    }
+    
+    // Ctrl + G = Gallery
+    if (e.ctrlKey && e.key === 'g') {
+        e.preventDefault();
+        window.location.href = '/gallery';
+    }
+    
+    // Esc = Close modals
+    if (e.key === 'Escape') {
+        document.getElementById('helpOverlay')?.classList.remove('active');
+    }
+    
+    // ? = Show help
+    if (e.key === '?' && !e.ctrlKey && !e.altKey) {
+        e.preventDefault();
+        toggleHelp();
+    }
+    
+    // Ctrl + Enter = Submit active form
+    if (e.ctrlKey && e.key === 'Enter') {
+        const activeForm = document.querySelector('form');
+        if (activeForm) {
+            activeForm.submit();
+        }
+    }
+    
+    // Alt + ← = Go back
+    if (e.altKey && e.key === 'ArrowLeft') {
+        e.preventDefault();
+        window.history.back();
+    }
+});
+
+// 6. File drag and drop enhancement
+document.querySelectorAll('input[type="file"]').forEach(input => {
+    const parent = input.parentElement;
+    
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        parent.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        parent.addEventListener(eventName, () => {
+            parent.classList.add('dragover');
+        }, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        parent.addEventListener(eventName, () => {
+            parent.classList.remove('dragover');
+        }, false);
+    });
+    
+    parent.addEventListener('drop', function(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        input.files = files;
+        showStatus('File ready to upload!');
+    }, false);
+});
+
+// 7. Form submission with status
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Processing...';
+        }
+        
+        showStatus('Processing your request...', 'warning');
+    });
+});
+
+// 8. Auto-save form inputs (localStorage)
+document.querySelectorAll('input[type="range"], input[type="number"]').forEach(input => {
+    // Load saved value
+    const savedValue = localStorage.getItem('form_' + input.name);
+    if (savedValue) {
+        input.value = savedValue;
+    }
+    
+    // Save on change
+    input.addEventListener('change', function() {
+        localStorage.setItem('form_' + input.name, this.value);
+    });
+});
+
+// 9. Detect slow operations
+let operationStartTime;
+window.addEventListener('beforeunload', function() {
+    operationStartTime = Date.now();
+});
+
+window.addEventListener('load', function() {
+    if (operationStartTime) {
+        const duration = Date.now() - operationStartTime;
+        if (duration > 10000) {
+            showStatus('Operation completed successfully!');
+        }
+    }
+});
+
+// 10. Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    updateBreadcrumbs();
+    
+    // Show welcome message
+    setTimeout(() => {
+        showStatus('💡 Press ? for keyboard shortcuts');
+    }, 2000);
+});
+</script>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Interactive Generative Studio | Digital Creativity Project</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">National School of Applied Sciences - Tangier</p>
+    </footer>
+    <!-- Ajoutez ce code AVANT </body> dans base.html -->
+
+<style>
+/* ========== ANIMATIONS CRÉATIVES ========== */
+
+/* Loading animation créatif */
+.loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(102, 126, 234, 0.95);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(10px);
+}
+
+.loading-overlay.active {
+    display: flex;
+}
+
+.loading-art {
+    text-align: center;
+}
+
+.spinner {
+    width: 100px;
+    height: 100px;
+    border: 8px solid rgba(255, 255, 255, 0.2);
+    border-top: 8px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 2rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-text {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Particules créatives en background */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0.3;
+    animation: float 20s infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    50% { transform: translateY(-100px) translateX(50px); }
+}
+
+/* Effet hover créatif sur les cartes */
+.feature-card, .control-panel, .image-box, .audio-box {
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::after, .control-panel::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.6s;
+    pointer-events: none;
+}
+
+.feature-card:hover::after, .control-panel:hover::after {
+    left: 100%;
+}
+
+/* Toast notifications créatives */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    z-index: 10000;
+    animation: slideIn 0.5s ease-out;
+    display: none;
+}
+
+.toast.show {
+    display: block;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Progress bar créatif */
+.progress-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    z-index: 9998;
+    display: none;
+}
+
+.progress-container.active {
+    display: block;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+    width: 0%;
+    transition: width 0.3s;
+    background-size: 200% 100%;
+    animation: gradient-shift 2s ease infinite;
+}
+
+@keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Cursor personnalisé créatif */
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="%23667eea" opacity="0.5"/></svg>') 12 12, auto;
+}
+
+a, button, .btn {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="%23764ba2"/></svg>') 12 12, pointer;
+}
+
+/* Effet de parallax subtil */
+.container {
+    transform-style: preserve-3d;
+}
+
+/* Animations d'entrée pour les éléments */
+.fade-in {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Bouton avec effet ripple */
+.btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Mode sombre/clair toggle (bonus créatif) */
+.theme-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    z-index: 1000;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.theme-toggle:hover {
+    transform: scale(1.1) rotate(90deg);
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+}
+</style>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-art">
+        <div class="spinner"></div>
+        <div class="loading-text">🎨 Creating magic...</div>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<!-- Particules décoratives -->
+<div class="particles" id="particles"></div>
+
+<!-- Theme Toggle -->
+<button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+    🌙
+</button>
+
+<script>
+// ========== FONCTIONS CRÉATIVES ==========
+
+// 1. Loading animation pour les formulaires
+document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressBar = document.getElementById('progressBar');
+        
+        loadingOverlay.classList.add('active');
+        progressContainer.classList.add('active');
+        
+        // Simulate progress
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 90) progress = 90;
+            progressBar.style.width = progress + '%';
+        }, 200);
+        
+        // Stop after form submission
+        setTimeout(() => {
+            clearInterval(interval);
+            progressBar.style.width = '100%';
+        }, 3000);
+    });
+});
+
+// 2. Toast notifications
+function showToast(message, duration = 3000) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, duration);
+}
+
+// Show toast on download
+document.querySelectorAll('a[href*="download"]').forEach(link => {
+    link.addEventListener('click', function(e) {
+        showToast('✅ Download started!');
+    });
+});
+
+// 3. Générer particules créatives
+function createParticles() {
+    const particlesContainer = document.getElementById('particles');
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.top = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 20 + 's';
+        particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+        particlesContainer.appendChild(particle);
+    }
+}
+
+// 4. Theme toggle (dark/light mode)
+let isDarkMode = false;
+const themeToggle = document.getElementById('themeToggle');
+
+themeToggle.addEventListener('click', function() {
+    isDarkMode = !isDarkMode;
+    
+    if (isDarkMode) {
+        document.body.style.background = 'linear-gradient(135deg, #2d3748 0%, #1a202c 100%)';
+        themeToggle.textContent = '☀️';
+        showToast('🌙 Dark mode activated');
+    } else {
+        document.body.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        themeToggle.textContent = '🌙';
+        showToast('☀️ Light mode activated');
+    }
+});
+
+// 5. Fade-in animation pour les éléments
+function addFadeInAnimation() {
+    const elements = document.querySelectorAll('.feature-card, .control-panel, .image-box, .audio-box');
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('fade-in');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    elements.forEach(el => observer.observe(el));
+}
+
+// 6. Effet parallax sur scroll
+let lastScrollY = window.scrollY;
+
+window.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    const container = document.querySelector('.container');
+    
+    if (container) {
+        const parallaxValue = scrollY * 0.05;
+        container.style.transform = `translateY(${parallaxValue}px)`;
+    }
+    
+    lastScrollY = scrollY;
+});
+
+// 7. Easter egg - Konami code
+let konamiCode = [];
+const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+document.addEventListener('keydown', function(e) {
+    konamiCode.push(e.key);
+    konamiCode = konamiCode.slice(-10);
+    
+    if (konamiCode.join('') === konamiPattern.join('')) {
+        showToast('🎉 SECRET UNLOCKED! Rainbow Mode!', 5000);
+        document.body.style.animation = 'rainbow 3s linear infinite';
+    }
+});
+
+// 8. Confetti effect on successful generation
+function createConfetti() {
+    const colors = ['#667eea', '#764ba2', '#f093fb', '#48bb78', '#f56565'];
+    const confettiCount = 50;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.style.position = 'fixed';
+        confetti.style.width = '10px';
+        confetti.style.height = '10px';
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.left = Math.random() * window.innerWidth + 'px';
+        confetti.style.top = '-10px';
+        confetti.style.borderRadius = '50%';
+        confetti.style.zIndex = '10000';
+        confetti.style.pointerEvents = 'none';
+        
+        document.body.appendChild(confetti);
+        
+        const animation = confetti.animate([
+            { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+            { transform: `translateY(${window.innerHeight}px) rotate(720deg)`, opacity: 0 }
+        ], {
+            duration: 3000 + Math.random() * 2000,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        });
+        
+        animation.onfinish = () => confetti.remove();
+    }
+}
+
+// Show confetti when image is generated
+if (document.querySelector('.image-container img')) {
+    setTimeout(createConfetti, 500);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    createParticles();
+    addFadeInAnimation();
+    showToast('👋 Welcome to Interactive Generative Studio!', 4000);
+});
+
+// Rainbow animation for easter egg
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes rainbow {
+        0% { filter: hue-rotate(0deg); }
+        100% { filter: hue-rotate(360deg); }
+    }
+`;
+document.head.appendChild(style);
+</script>
+</body>
+</html>

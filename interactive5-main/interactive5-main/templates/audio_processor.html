@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>🎵 Audio Processing Studio</h1>
+
+<p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 1.2rem;">
+    Transform and manipulate audio with professional effects and soundscape generation
+</p>
+
+<div class="control-panel">
+    <h3>1. Upload Audio File</h3>
+    <form method="POST" action="/audio-processor" enctype="multipart/form-data">
+        <div class="control-group">
+            <label for="audio">Select an audio file (MP3, WAV, OGG):</label>
+            <input type="file" name="audio" id="audio" accept="audio/*" required>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn">📤 Upload Audio</button>
+        </div>
+    </form>
+</div>
+
+{% if original_audio %}
+<div class="control-panel" style="margin-top: 1.5rem;">
+    <h3>2. Apply Audio Effect</h3>
+    <form method="POST" action="/audio-processor">
+        <div class="control-group">
+            <label for="effect">Choose an effect:</label>
+            <select name="effect" id="effect" required>
+                <optgroup label="⚡ Speed & Pitch">
+                    <option value="speed_up">Speed Up (1.5x)</option>
+                    <option value="slow_down">Slow Down (0.75x)</option>
+                    <option value="pitch_up">Pitch Up (+4 semitones)</option>
+                    <option value="pitch_down">Pitch Down (-4 semitones)</option>
+                </optgroup>
+                <optgroup label="🎚️ Spatial Effects">
+                    <option value="echo">Echo Effect</option>
+                    <option value="reverb">Reverb (Room)</option>
+                </optgroup>
+                <optgroup label="🎛️ Filters">
+                    <option value="lowpass">Low Pass Filter</option>
+                    <option value="highpass">High Pass Filter</option>
+                    <option value="bass_boost">Bass Boost</option>
+                </optgroup>
+            </select>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn">✨ Apply Effect</button>
+        </div>
+    </form>
+</div>
+
+<div class="audio-grid">
+    <div class="audio-box">
+        <h3 style="color: #667eea;">🎵 Original Audio</h3>
+        <audio controls style="width: 100%; margin-top: 1rem;">
+            <source src="{{ url_for('static', filename='audio/' + original_audio) }}" type="audio/mpeg">
+            Your browser does not support audio playback.
+        </audio>
+        <p style="margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">{{ original_audio }}</p>
+    </div>
+    
+    <div class="audio-box">
+        <h3 style="color: #764ba2;">✨ Processed Audio</h3>
+        {% if processed_audio %}
+        <audio controls style="width: 100%; margin-top: 1rem;">
+            <source src="{{ url_for('static', filename='audio/' + processed_audio) }}" type="audio/mpeg">
+            Your browser does not support audio playback.
+        </audio>
+        <p style="margin-top: 0.5rem; color: #718096; font-size: 0.9rem;">{{ processed_audio }}</p>
+        <div class="button-group" style="justify-content: center; margin-top: 1rem;">
+            <a href="{{ url_for('download', filename=processed_audio) }}" 
+               class="btn btn-success">💾 Download</a>
+        </div>
+        {% else %}
+        <div class="placeholder">
+            Choose an effect and click "Apply Effect"
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if spectrogram %}
+<div class="image-container" style="margin-top: 2rem;">
+    <h3>📊 Audio Spectrogram Visualization</h3>
+    <img src="{{ url_for('static', filename='generated/' + spectrogram) }}" 
+         alt="Audio spectrogram">
+    <p style="margin-top: 1rem; color: #4a5568;">
+        Visual representation of the audio frequency spectrum over time
+    </p>
+</div>
+{% endif %}
+
+{% else %}
+<div class="image-container">
+    <div class="placeholder">
+        Upload an audio file to start processing
+    </div>
+</div>
+{% endif %}
+
+<div class="control-panel" style="margin-top: 2rem; background: linear-gradient(135deg, #f0fff4, #c6f6d5);">
+    <h3>🌌 Generate Ambient Soundscape</h3>
+    <p style="color: #2d3748; margin-bottom: 1.5rem;">
+        Create an original ambient drone soundscape using synthesized harmonic layers
+    </p>
+    <form method="POST" action="/audio-processor">
+        <div class="control-group">
+            <label for="duration">Duration (seconds):</label>
+            <input type="number" name="duration" id="duration" value="10" min="5" max="30" required>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" name="generate_ambient" class="btn" 
+                    style="background: linear-gradient(135deg, #48bb78, #38a169);">
+                🌌 Generate Ambient
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="info-box">
+    <h3>🎵 About Audio Processing</h3>
+    <p>
+        This module uses <strong>PyDub</strong> for audio manipulation and <strong>Librosa</strong> 
+        for advanced processing and visualization.
+    </p>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">⚡ Speed & Pitch Effects</h4>
+    <ul style="margin-top: 0.5rem; line-height: 2;">
+        <li><strong>Speed Up:</strong> Increases playback speed by 1.5x using speedup effect</li>
+        <li><strong>Slow Down:</strong> Decreases speed to 0.75x by changing frame rate</li>
+        <li><strong>Pitch Up:</strong> Shifts pitch +4 semitones using librosa.effects.pitch_shift</li>
+        <li><strong>Pitch Down:</strong> Shifts pitch -4 semitones</li>
+    </ul>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">🎚️ Spatial Effects</h4>
+    <ul style="margin-top: 0.5rem; line-height: 2;">
+        <li><strong>Echo:</strong> Delayed copy with 300ms delay and 0.5 decay factor, multiple repetitions</li>
+        <li><strong>Reverb:</strong> Simulates room acoustics with multiple delayed copies at 50-300ms intervals</li>
+    </ul>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">🎛️ Audio Filters</h4>
+    <ul style="margin-top: 0.5rem; line-height: 2;">
+        <li><strong>Low Pass Filter:</strong> Removes frequencies above 1000Hz (muffled sound)</li>
+        <li><strong>High Pass Filter:</strong> Removes frequencies below 1000Hz (thin, tinny sound)</li>
+        <li><strong>Bass Boost:</strong> Amplifies low frequencies below 300Hz by +5dB</li>
+    </ul>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">🌌 Ambient Soundscape Generator</h4>
+    <p style="margin-top: 0.5rem; line-height: 1.8;">
+        Generates an original ambient drone using multiple harmonic layers (A2, E3, A3, E4, A4 frequencies), 
+        slow amplitude modulation at 0.1Hz, and ambient noise texture. Creates a meditative, atmospheric sound 
+        perfect for relaxation or background atmosphere.
+    </p>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">📊 Spectrogram Visualization</h4>
+    <p style="margin-top: 0.5rem; line-height: 1.8;">
+        Uses librosa's Short-Time Fourier Transform (STFT) to visualize frequency content over time. 
+        The spectrogram shows how different frequencies (vertical axis) change in amplitude (color intensity) 
+        as the audio plays (horizontal axis).
+    </p>
+    
+    <p style="margin-top: 1.5rem;">
+        <strong>Technologies:</strong> PyDub for audio manipulation, Librosa for pitch shifting and spectral analysis, 
+        NumPy for sound synthesis, SoundFile for WAV operations.
+    </p>
+    
+    <p style="margin-top: 0.5rem;">
+        <strong>Max file size:</strong> 50 MB | 
+        <strong>Supported formats:</strong> MP3, WAV, OGG, FLAC, M4A | 
+        <strong>Output format:</strong> MP3 (320kbps)
+    </p>
+</div>
+
+<style>
+    .audio-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 2.5rem;
+        margin-top: 2.5rem;
+    }
+
+    .audio-box {
+        background: #f7fafc;
+        padding: 2rem;
+        border-radius: 15px;
+        text-align: center;
+        border: 2px solid #e2e8f0;
+    }
+
+    .audio-box h3 {
+        margin-bottom: 1rem;
+    }
+
+    audio {
+        filter: drop-shadow(0 4px 10px rgba(0,0,0,0.1));
+    }
+
+    @media (max-width: 768px) {
+        .audio-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}

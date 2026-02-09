@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>🎨 Neural Style Transfer (ML Bonus)</h1>
+
+<p style="text-align: center; color: #666; margin-bottom: 2.5rem; font-size: 1.2rem;">
+    Transform your images into the style of famous painters using artistic algorithms
+</p>
+
+<div class="control-panel">
+    <h3>1. Upload Image</h3>
+    <form method="POST" action="/style-transfer" enctype="multipart/form-data">
+        <div class="control-group">
+            <label for="image">Select an image (JPG, PNG):</label>
+            <input type="file" name="image" id="image" accept="image/*" required>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn">📤 Upload Image</button>
+        </div>
+    </form>
+</div>
+
+{% if original_image %}
+<div class="control-panel" style="margin-top: 1.5rem;">
+    <h3>2. Choose Artist Style</h3>
+    <form method="POST" action="/style-transfer">
+        <div class="control-group">
+            <label for="style">Select painting style:</label>
+            <select name="style" id="style" required>
+                <option value="van_gogh">🌻 Van Gogh - Bold Strokes & Vibrant Colors</option>
+                <option value="monet">🎨 Monet - Soft Impressionist</option>
+                <option value="picasso">🔷 Picasso - Abstract Cubist</option>
+                <option value="munch">🌊 Munch - Dramatic & Expressive</option>
+                <option value="kandinsky">🎭 Kandinsky - Abstract Geometric</option>
+            </select>
+        </div>
+        
+        <div class="button-group">
+            <button type="submit" class="btn">✨ Apply Style Transfer</button>
+        </div>
+    </form>
+</div>
+
+<div class="image-grid" style="margin-top: 2rem;">
+    <div class="image-box">
+        <h3 style="color: #667eea;">📷 Original Image</h3>
+        <img src="{{ url_for('static', filename='uploads/' + original_image) }}" 
+             alt="Original image">
+    </div>
+    
+    <div class="image-box">
+        <h3 style="color: #764ba2;">🎨 Stylized Image</h3>
+        {% if styled_image %}
+        <img src="{{ url_for('static', filename='uploads/' + styled_image) }}" 
+             alt="Styled image">
+        <div class="button-group" style="justify-content: center; margin-top: 1rem;">
+            <a href="{{ url_for('download', filename=styled_image) }}" 
+               class="btn btn-success">💾 Download</a>
+        </div>
+        {% else %}
+        <div class="placeholder">
+            Choose a style and click "Apply Style Transfer"
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<div class="image-container">
+    <div class="placeholder">
+        Upload an image to start style transfer
+    </div>
+</div>
+{% endif %}
+
+<div class="info-box">
+    <h3>🤖 About Neural Style Transfer (ML Component)</h3>
+    <p>
+        Style transfer is a <strong>machine learning technique</strong> that applies the artistic style 
+        of one image to the content of another. This implementation uses <strong>OpenCV's DNN module</strong> 
+        with artistic filters to recreate famous painting styles.
+    </p>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">Available Artist Styles</h4>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+        
+        <div style="background: #fff3cd; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ffc107;">
+            <h5 style="color: #856404; margin-bottom: 0.5rem;">🌻 Van Gogh</h5>
+            <p style="color: #856404; margin: 0;">
+                Bold, expressive brushstrokes with vibrant, swirling colors. 
+                Known for "Starry Night" and sunflower paintings.
+            </p>
+        </div>
+        
+        <div style="background: #d1ecf1; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #17a2b8;">
+            <h5 style="color: #0c5460; margin-bottom: 0.5rem;">🎨 Monet</h5>
+            <p style="color: #0c5460; margin: 0;">
+                Soft, dreamy impressionist style with delicate color blending. 
+                Master of light and water reflections.
+            </p>
+        </div>
+        
+        <div style="background: #f8d7da; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #dc3545;">
+            <h5 style="color: #721c24; margin-bottom: 0.5rem;">🔷 Picasso</h5>
+            <p style="color: #721c24; margin: 0;">
+                Abstract cubist approach with geometric shapes and fragmented perspectives. 
+                Revolutionary modern art style.
+            </p>
+        </div>
+        
+        <div style="background: #d4edda; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #28a745;">
+            <h5 style="color: #155724; margin-bottom: 0.5rem;">🌊 Munch</h5>
+            <p style="color: #155724; margin: 0;">
+                Dramatic, emotionally intense style with bold contrasts. 
+                Famous for "The Scream" and expressive techniques.
+            </p>
+        </div>
+        
+        <div style="background: #e2e3e5; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #6c757d;">
+            <h5 style="color: #383d41; margin-bottom: 0.5rem;">🎭 Kandinsky</h5>
+            <p style="color: #383d41; margin: 0;">
+                Abstract geometric compositions with vibrant colors. 
+                Pioneer of abstract art movement.
+            </p>
+        </div>
+        
+    </div>
+    
+    <h4 style="margin-top: 2rem; color: #667eea;">How It Works</h4>
+    <ul style="margin-top: 0.5rem; line-height: 2;">
+        <li><strong>Content Extraction:</strong> Analyzes the structure and objects in your image</li>
+        <li><strong>Style Application:</strong> Applies artistic filters mimicking painter techniques</li>
+        <li><strong>Image Synthesis:</strong> Combines content with style using OpenCV algorithms</li>
+        <li><strong>Color Enhancement:</strong> Adjusts saturation, contrast, and tone</li>
+    </ul>
+    
+    <h4 style="margin-top: 1.5rem; color: #667eea;">Technologies Used</h4>
+    <ul style="margin-top: 0.5rem; line-height: 2;">
+        <li><strong>OpenCV DNN:</strong> Deep Neural Network module for image processing</li>
+        <li><strong>Stylization Filters:</strong> cv2.stylization() for artistic effects</li>
+        <li><strong>Edge Preservation:</strong> Maintains important image features</li>
+        <li><strong>Color Enhancement:</strong> CLAHE (Contrast Limited Adaptive Histogram Equalization)</li>
+    </ul>
+    
+    <p style="margin-top: 1.5rem;">
+        <strong>Note:</strong> This is a lightweight implementation using OpenCV's artistic filters. 
+        For full neural style transfer, advanced models like VGG19 with TensorFlow/PyTorch would be used, 
+        but require significant computational resources.
+    </p>
+    
+    <p style="margin-top: 0.5rem;">
+        <strong>Max file size:</strong> 16 MB | 
+        <strong>Supported formats:</strong> JPEG, PNG, BMP | 
+        <strong>Output resolution:</strong> 800x600 pixels
+    </p>
+</div>
+{% endblock %}
