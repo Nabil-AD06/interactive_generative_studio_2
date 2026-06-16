@@ -1,0 +1,27 @@
+* text=auto
+
+# Python
+*.py text diff=python
+*.pyw text
+*.pyx text
+*.pxd text
+*.pxi text
+
+# HTML/JS/CSS
+*.html text diff=html
+*.css text
+*.js text
+
+# Data
+*.csv text
+*.json text
+*.md text
+*.txt text
+
+# Binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.wav binary
+*.mp3 binary
+*.ico binary

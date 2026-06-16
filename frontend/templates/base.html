@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Interactive Generative Studio{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='favicon.svg') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/components.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/animations.css') }}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+  <nav>
+    <ul>
+      <li class="logo">🌀 GenStudio</li>
+      <li><a href="/">Home</a></li>
+      <li><a href="/generative">Generative Art</a></li>
+      <li><a href="/data-viz">Data Viz</a></li>
+      <li><a href="/image-processor">Image FX</a></li>
+      <li><a href="/audio-processor">Audio FX</a></li>
+      <li><a href="/style-transfer">Style Transfer (ML)</a></li>
+      <li><a href="/gallery">Gallery</a></li>
+    </ul>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </nav>
+
+  <div class="breadcrumbs">
+    <a href="/">&#x1F3E0; Home</a>
+    <span class="separator">&#x203A;</span>
+    <span class="current" id="currentPage">Dashboard</span>
+  </div>
+
+  <div class="quick-actions">
+    <button class="quick-action-btn" onclick="scrollToTop()" title="Back to top">
+      <span class="quick-action-tooltip">Back to Top</span>&#x2B06;&#xFE0F;
+    </button>
+    <button class="quick-action-btn" onclick="toggleHelp()" title="Help">
+      <span class="quick-action-tooltip">Keyboard Shortcuts</span>&#x2753;
+    </button>
+    <button class="quick-action-btn" onclick="window.location.href='/gallery'" title="Gallery">
+      <span class="quick-action-tooltip">View Gallery</span>&#x1F3AD;
+    </button>
+    <button class="quick-action-btn" onclick="window.history.back()" title="Go back">
+      <span class="quick-action-tooltip">Go Back</span>&#x2B05;&#xFE0F;
+    </button>
+  </div>
+
+  <div class="help-overlay" id="helpOverlay">
+    <div class="help-content">
+      <button class="help-close" onclick="toggleHelp()">&times;</button>
+      <h2 style="color: var(--primary-500); margin-bottom: 1.5rem;">&#x2328;&#xFE0F; Keyboard Shortcuts</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+        <div>
+          <h4 style="margin-bottom: 1rem;">Navigation</h4>
+          <div class="shortcut"><span><kbd class="key">Ctrl</kbd> + <kbd class="key">H</kbd></span> <span>Home</span></div>
+          <div class="shortcut"><span><kbd class="key">Ctrl</kbd> + <kbd class="key">G</kbd></span> <span>Gallery</span></div>
+          <div class="shortcut"><span><kbd class="key">Esc</kbd></span> <span>Close Modal</span></div>
+          <div class="shortcut"><span><kbd class="key">Alt</kbd> + <kbd class="key">&larr;</kbd></span> <span>Go Back</span></div>
+        </div>
+        <div>
+          <h4 style="margin-bottom: 1rem;">Actions</h4>
+          <div class="shortcut"><span><kbd class="key">Ctrl</kbd> + <kbd class="key">Enter</kbd></span> <span>Submit Form</span></div>
+          <div class="shortcut"><span><kbd class="key">Ctrl</kbd> + <kbd class="key">S</kbd></span> <span>Download</span></div>
+          <div class="shortcut"><span><kbd class="key">Space</kbd></span> <span>Play/Pause Audio</span></div>
+          <div class="shortcut"><span><kbd class="key">?</kbd></span> <span>Show Help</span></div>
+        </div>
+      </div>
+      <p style="margin-top: 2rem; color: var(--gray-500); text-align: center;">Press <kbd class="key">?</kbd> anytime to see this help</p>
+    </div>
+  </div>
+
+  <div class="status-indicator" id="statusIndicator">
+    <span class="status-icon">&#x2705;</span>
+    <span class="status-text">Ready</span>
+  </div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-art">
+      <div class="spinner"></div>
+      <div class="loading-text">&#x1F3A8; Creating magic...</div>
+    </div>
+  </div>
+
+  <div class="progress-container" id="progressContainer">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <div class="particles" id="particles"></div>
+
+  <button class="theme-toggle" id="themeToggle" title="Toggle Theme">&#x1F319;</button>
+
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer>
+    <p>&copy; <span id="currentYear">2025</span> Interactive Generative Studio | Digital Creativity Project</p>
+    <p style="margin-top: 0.5rem; font-size: 0.9rem;">National School of Applied Sciences - Tangier</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/base.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

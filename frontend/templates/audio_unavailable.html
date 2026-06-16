@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="text-align: center; padding: 4rem 2rem;">
+  <div style="font-size: 6rem; margin-bottom: 2rem;">🎵</div>
+
+  <h1 style="color: #e53e3e; margin-bottom: 1.5rem;">Audio Processing Unavailable</h1>
+
+  <p style="font-size: 1.3rem; color: var(--gray-700); margin-bottom: 2.5rem; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.8;">
+    The audio processing module requires additional Python libraries that are not currently installed.
+  </p>
+
+  <div class="info-box" style="max-width: 800px; margin: 0 auto 2.5rem; text-align: left;">
+    <h3>📦 Required Libraries</h3>
+    <p style="margin-bottom: 1rem;">To enable audio processing features, please install the following packages:</p>
+    <div style="background: var(--gray-800); color: var(--gray-200); padding: 1.5rem; border-radius: 10px; font-family: var(--font-mono); margin: 1rem 0;">
+      <code style="display: block; line-height: 1.8;">
+pip install pydub<br>
+pip install librosa<br>
+pip install soundfile<br>
+pip install ffmpeg-python
+      </code>
+    </div>
+    <p style="margin-top: 1.5rem;"><strong>Note:</strong> FFmpeg must also be installed on your system:</p>
+    <ul style="margin: 1rem 0 1rem 1.5rem; line-height: 2;">
+      <li><strong>Ubuntu/Debian:</strong> <code style="background: var(--gray-200); padding: 0.2rem 0.5rem; border-radius: 4px;">sudo apt-get install ffmpeg</code></li>
+      <li><strong>macOS:</strong> <code style="background: var(--gray-200); padding: 0.2rem 0.5rem; border-radius: 4px;">brew install ffmpeg</code></li>
+      <li><strong>Windows:</strong> Download from <a href="https://ffmpeg.org/download.html" target="_blank" style="color: var(--primary-500);">ffmpeg.org</a></li>
+    </ul>
+  </div>
+
+  <div style="background: linear-gradient(135deg, #fff5f5, #fed7d7); border-left: 5px solid #e53e3e; padding: 2rem; border-radius: var(--radius-md); max-width: 800px; margin: 0 auto 2.5rem; text-align: left;">
+    <h3 style="color: #c53030; margin-bottom: 1rem;">⚠️ What's Missing?</h3>
+    <ul style="margin-left: 1.5rem; line-height: 2; color: var(--gray-800);">
+      <li><strong>PyDub:</strong> Audio file manipulation (speed, pitch, effects)</li>
+      <li><strong>Librosa:</strong> Advanced audio analysis and pitch shifting</li>
+      <li><strong>SoundFile:</strong> Reading and writing audio files</li>
+      <li><strong>FFmpeg:</strong> Audio codec support for multiple formats</li>
+    </ul>
+  </div>
+
+  <div style="background: linear-gradient(135deg, #f0fff4, #c6f6d5); border-left: 5px solid #38a169; padding: 2rem; border-radius: var(--radius-md); max-width: 800px; margin: 0 auto 2.5rem; text-align: left;">
+    <h3 style="color: #22543d; margin-bottom: 1rem;">✨ Available Audio Features (Once Installed)</h3>
+    <ul style="margin-left: 1.5rem; line-height: 2; color: var(--gray-800);">
+      <li>Speed up / slow down audio playback</li>
+      <li>Pitch shifting (+/- semitones)</li>
+      <li>Echo and reverb effects</li>
+      <li>Audio filters (lowpass, highpass, bass boost)</li>
+      <li>Ambient soundscape generation</li>
+      <li>Spectrogram visualization</li>
+      <li>Audio layering and mixing</li>
+    </ul>
+  </div>
+
+  <div class="button-group" style="justify-content: center; margin-top: 3rem;">
+    <a href="/" class="btn">🏠 Return Home</a>
+    <a href="/gallery" class="btn" style="background: linear-gradient(135deg, #4299e1, #3182ce);">🎭 View Gallery</a>
+  </div>
+
+  <div style="margin-top: 3rem; padding: 2rem; background: var(--gray-200); border-radius: var(--radius-md); max-width: 800px; margin-left: auto; margin-right: auto;">
+    <h4 style="color: var(--primary-500); margin-bottom: 1rem;">💡 Quick Installation Guide</h4>
+    <ol style="text-align: left; line-height: 2; color: var(--gray-800); margin-left: 2rem;">
+      <li>Open your terminal/command prompt</li>
+      <li>Navigate to your project directory</li>
+      <li>Run: <code style="background: white; padding: 0.3rem 0.6rem; border-radius: 4px;">pip install pydub librosa soundfile ffmpeg-python</code></li>
+      <li>Install FFmpeg for your operating system (see instructions above)</li>
+      <li>Restart the Flask application</li>
+      <li>Refresh this page - audio features should now be available!</li>
+    </ol>
+  </div>
+
+  <p style="margin-top: 3rem; color: var(--gray-600); font-size: 0.95rem;">
+    Having trouble installing? Check the <a href="https://github.com/jiaaro/pydub#installation" target="_blank" style="color: var(--primary-500); text-decoration: underline;">PyDub documentation</a>
+    or <a href="https://librosa.org/doc/latest/install.html" target="_blank" style="color: var(--primary-500); text-decoration: underline;">Librosa installation guide</a>.
+  </p>
+</div>
+{% endblock %}

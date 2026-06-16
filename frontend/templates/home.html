@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="hero-3d-wrapper">
+  <div id="hero-3d"></div>
+  <div class="hero-3d-overlay">
+    <div class="hero-3d-content">
+      <span class="hero-badge">&#x1F3A8; Creative Studio</span>
+      <h1 class="hero-3d-title">Interactive Generative<br>Studio</h1>
+      <p class="hero-3d-subtitle">
+        Explore the intersection of code, art, and data through cutting-edge creative technologies
+      </p>
+      <div class="hero-actions">
+        <a href="/generative" class="btn btn-lg">&#x1F300; Start Creating</a>
+        <a href="/gallery" class="btn btn-lg btn-outline">&#x1F3AD; View Gallery</a>
+      </div>
+      <div class="hero-scroll-indicator">
+        <span class="scroll-mouse">
+          <span class="scroll-dot"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="hero-section">
+  <div class="hero-grid">
+    <div class="feature-card">
+      <div class="icon">&#x1F300;</div>
+      <h3>Generative Art</h3>
+      <p>Create stunning algorithmic artworks with OOP design and customizable parameters</p>
+      <div class="features-list">
+        <span class="tag">Fractals</span>
+        <span class="tag">Geometry</span>
+        <span class="tag">POO</span>
+      </div>
+      <a href="/generative" class="btn" style="margin-top: 1.5rem;">Explore Studio</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon">&#x1F4CA;</div>
+      <h3>Data Visualization</h3>
+      <p>Transform raw data into beautiful artistic representations</p>
+      <div class="features-list">
+        <span class="tag">Matplotlib</span>
+        <span class="tag">Pandas</span>
+        <span class="tag">NumPy</span>
+      </div>
+      <a href="/data-viz" class="btn" style="margin-top: 1.5rem;">Visualize Data</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon">&#x1F5BC;&#xFE0F;</div>
+      <h3>Image Processing</h3>
+      <p>Apply 25+ professional effects including glitch, watercolor, and cartoon</p>
+      <div class="features-list">
+        <span class="tag">25+ Effects</span>
+        <span class="tag">OpenCV</span>
+        <span class="tag">PIL</span>
+      </div>
+      <a href="/image-processor" class="btn" style="margin-top: 1.5rem;">Process Images</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon">&#x1F3B5;</div>
+      <h3>Audio Processing</h3>
+      <p>Manipulate audio with pitch shifting, echo, reverb and more</p>
+      <div class="features-list">
+        <span class="tag">PyDub</span>
+        <span class="tag">Librosa</span>
+        <span class="tag">FFmpeg</span>
+      </div>
+      <a href="/audio-processor" class="btn" style="margin-top: 1.5rem;">Create Sounds</a>
+    </div>
+
+    <div class="feature-card special-card">
+      <div class="ml-badge">&#x1F916; ML BONUS</div>
+      <div class="icon">&#x1F3A8;</div>
+      <h3>Neural Style Transfer</h3>
+      <p>Transform images into masterpieces using famous artist styles</p>
+      <div class="features-list">
+        <span class="tag-light">Van Gogh</span>
+        <span class="tag-light">Monet</span>
+        <span class="tag-light">Picasso</span>
+      </div>
+      <a href="/style-transfer" class="btn btn-special" style="margin-top: 1.5rem;">Transform Art</a>
+    </div>
+
+    <div class="feature-card">
+      <div class="icon">&#x1F3AD;</div>
+      <h3>Gallery</h3>
+      <p>Browse stunning examples and get inspired by creative possibilities</p>
+      <div class="features-list">
+        <span class="tag">Examples</span>
+        <span class="tag">Showcase</span>
+        <span class="tag">Inspiration</span>
+      </div>
+      <a href="/gallery" class="btn" style="margin-top: 1.5rem;">View Gallery</a>
+    </div>
+  </div>
+
+  <div class="stats-section">
+    <div class="stat-card">
+      <div class="stat-number">6</div>
+      <div class="stat-label">Creative Modules</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">58+</div>
+      <div class="stat-label">Unique Features</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">25+</div>
+      <div class="stat-label">Image Effects</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">5</div>
+      <div class="stat-label">Artist Styles (ML)</div>
+    </div>
+  </div>
+
+  <div class="info-box-modern">
+    <div class="info-header">
+      <span class="info-icon">&#x1F4A1;</span>
+      <h3>About This Project</h3>
+    </div>
+    <p>
+      This interactive studio demonstrates the power of <strong>Python for digital creativity</strong>.
+      It combines generative art, data processing, image manipulation, audio transformation,
+      and machine learning in an intuitive web interface built with Flask.
+    </p>
+    <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--gray-200);">
+      <p style="margin: 0;">
+        <strong>&#x1F680; Technologies:</strong> Object-Oriented Programming (OOP), generative algorithms,
+        artistic data visualization, 25+ image filters with OpenCV, audio processing with PyDub/Librosa,
+        neural style transfer with OpenCV DNN, and web development with Flask.
+      </p>
+    </div>
+    <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; justify-content: center;">
+      <span class="tech-badge">Python</span>
+      <span class="tech-badge">Flask</span>
+      <span class="tech-badge">OpenCV</span>
+      <span class="tech-badge">PIL</span>
+      <span class="tech-badge">Matplotlib</span>
+      <span class="tech-badge">PyDub</span>
+      <span class="tech-badge">Librosa</span>
+      <span class="tech-badge">NumPy</span>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="{{ url_for('static', filename='js/pages/home_3d.js') }}"></script>
+<script src="{{ url_for('static', filename='js/pages/home.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,12 @@
+.ambient-panel {
+  background: linear-gradient(135deg, var(--primary-50), #d1fae5);
+  border: 1px solid var(--primary-200);
+}
+
+.spectrogram-section {
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .ambient-panel { padding: 1.25rem; }
+}

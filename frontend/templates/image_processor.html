@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/image_processor.css') }}">
+{% endblock %}
+
+{% block content %}
+<h1>🖼️ Studio de Traitement d'Images</h1>
+
+<div class="control-panel">
+  <h3>1. Télécharger une Image</h3>
+  <form method="POST" action="/image-processor" enctype="multipart/form-data">
+    <div class="control-group">
+      <label for="image">Sélectionner une image (JPG, PNG) :</label>
+      <input type="file" name="image" id="image" accept="image/*" required>
+    </div>
+    <div class="button-group">
+      <button type="submit" class="btn">📤 Télécharger l'Image</button>
+    </div>
+  </form>
+</div>
+
+{% if original_image %}
+<div class="control-panel" style="margin-top: 1.5rem;">
+  <h3>2. Appliquer un Effet</h3>
+  <form method="POST" action="/image-processor">
+    <div class="control-group">
+      <label for="filter">Choisir un effet :</label>
+      <select name="filter" id="filter" required>
+        <optgroup label="🎨 Filtres de Couleur">
+          <option value="grayscale">Noir et Blanc</option>
+          <option value="sepia">Sépia (Vintage)</option>
+          <option value="neon">Néon Vibrant</option>
+          <option value="invert">Inverser les Couleurs</option>
+          <option value="vintage">Effet Vintage</option>
+          <option value="warm">Température Chaude</option>
+          <option value="cool">Température Froide</option>
+          <option value="high_contrast">Contraste Élevé</option>
+        </optgroup>
+        <optgroup label="🖌️ Distorsions Artistiques">
+          <option value="glitch">Effet Glitch</option>
+          <option value="pixelate">Pixeliser</option>
+          <option value="watercolor">Aquarelle</option>
+          <option value="oil_painting">Peinture à l'Huile</option>
+          <option value="cartoon">Cartoon</option>
+          <option value="sketch">Esquisse au Crayon</option>
+          <option value="blur">Flou</option>
+        </optgroup>
+        <optgroup label="📐 Transformations Géométriques">
+          <option value="rotate_90">Rotation 90°</option>
+          <option value="rotate_180">Rotation 180°</option>
+          <option value="flip_horizontal">Miroir Horizontal</option>
+          <option value="flip_vertical">Miroir Vertical</option>
+        </optgroup>
+        <optgroup label="✨ Effets Avancés">
+          <option value="sharpen">Netteté</option>
+          <option value="edge">Détection de Contours</option>
+          <option value="emboss">Gaufrage (Emboss)</option>
+          <option value="contour">Contour</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="button-group">
+      <button type="submit" class="btn">✨ Appliquer l'Effet</button>
+    </div>
+  </form>
+</div>
+
+<div class="image-grid">
+  <div class="image-box">
+    <h3 style="color: var(--primary-500);">📷 Image Originale</h3>
+    <img src="{{ url_for('media_file', filename='uploads/' + original_image) }}" alt="Image originale">
+  </div>
+  <div class="image-box">
+    <h3 style="color: var(--secondary-500);">✨ Image Traitée</h3>
+    {% if processed_image %}
+    <img src="{{ url_for('media_file', filename='uploads/' + processed_image) }}" alt="Image traitée">
+    <div class="button-group" style="justify-content: center; margin-top: 1rem;">
+      <a href="{{ url_for('download', filename=processed_image) }}" class="btn btn-success">💾 Télécharger</a>
+    </div>
+    {% else %}
+    <div class="placeholder">Choisissez un effet et cliquez sur "Appliquer"</div>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="image-container">
+  <div class="placeholder">Commencez par télécharger une image pour la traiter</div>
+</div>
+{% endif %}
+
+<div class="info-box">
+  <h3>À propos des Effets d'Image</h3>
+  <p>Ce module utilise <strong>PIL (Pillow)</strong> et <strong>OpenCV</strong> pour appliquer une variété d'effets créatifs à vos images.</p>
+
+  <h4 style="margin-top: 1.5rem; color: var(--primary-500);">🎨 Filtres de Couleur</h4>
+  <ul style="margin-top: 0.5rem; line-height: 2;">
+    <li><strong>Noir et Blanc :</strong> Conversion en niveaux de gris</li>
+    <li><strong>Sépia :</strong> Effet vintage avec manipulation RGB manuelle</li>
+    <li><strong>Néon Vibrant :</strong> Augmentation intense de saturation et luminosité</li>
+    <li><strong>Inverser :</strong> Inversion des canaux de couleur (négatif)</li>
+    <li><strong>Vintage :</strong> Combinaison sépia + réduction contraste + flou léger</li>
+    <li><strong>Température Chaude :</strong> Augmente rouge, diminue bleu</li>
+    <li><strong>Température Froide :</strong> Augmente bleu, diminue rouge</li>
+    <li><strong>Contraste Élevé :</strong> Renforcement du contraste (2x)</li>
+  </ul>
+
+  <h4 style="margin-top: 1.5rem; color: var(--primary-500);">🖌️ Distorsions Artistiques</h4>
+  <ul style="margin-top: 0.5rem; line-height: 2;">
+    <li><strong>Effet Glitch :</strong> Décalages horizontaux aléatoires + shifts de canaux RGB</li>
+    <li><strong>Pixeliser :</strong> Effet pixel art rétro par downscaling/upscaling</li>
+    <li><strong>Aquarelle :</strong> Filtre bilatéral + median blur + réduction palette (OpenCV)</li>
+    <li><strong>Peinture à l'Huile :</strong> Multiples passes de filtre bilatéral</li>
+    <li><strong>Cartoon :</strong> Détection contours adaptatifs + quantification couleur</li>
+    <li><strong>Esquisse au Crayon :</strong> Algorithme de division grayscale/blur inversé</li>
+    <li><strong>Flou :</strong> Flou gaussien (rayon 5)</li>
+  </ul>
+
+  <h4 style="margin-top: 1.5rem; color: var(--primary-500);">📐 Transformations Géométriques</h4>
+  <ul style="margin-top: 0.5rem; line-height: 2;">
+    <li><strong>Rotation 90° :</strong> Rotation dans le sens horaire</li>
+    <li><strong>Rotation 180° :</strong> Rotation complète</li>
+    <li><strong>Miroir Horizontal :</strong> Symétrie gauche-droite</li>
+    <li><strong>Miroir Vertical :</strong> Symétrie haut-bas</li>
+  </ul>
+
+  <h4 style="margin-top: 1.5rem; color: var(--primary-500);">✨ Effets Avancés</h4>
+  <ul style="margin-top: 0.5rem; line-height: 2;">
+    <li><strong>Netteté :</strong> Amélioration des contours pour plus de détails</li>
+    <li><strong>Détection de Contours :</strong> Extraction des lignes et bordures</li>
+    <li><strong>Gaufrage :</strong> Effet 3D en relief</li>
+    <li><strong>Contour :</strong> Tracé des contours de l'image</li>
+  </ul>
+
+  <p style="margin-top: 1.5rem;"><strong>Technologies :</strong> PIL/Pillow pour effets de base, OpenCV pour effets avancés (aquarelle, cartoon, esquisse).</p>
+  <p style="margin-top: 0.5rem;"><strong>Taille maximale :</strong> 16 MB | <strong>Formats acceptés :</strong> JPEG, PNG, BMP, GIF | <strong>Résolution de sortie :</strong> 800x600 pixels</p>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/pages/image_processor.js') }}"></script>
+{% endblock %}

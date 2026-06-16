@@ -1,0 +1,11 @@
+.art-controls-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .art-controls-grid {
+    grid-template-columns: 1fr;
+  }
+}

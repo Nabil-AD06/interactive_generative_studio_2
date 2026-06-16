@@ -1,0 +1,14 @@
+.filter-category {
+  margin-bottom: 1rem;
+}
+
+.filter-category summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--primary-500);
+  padding: 0.5rem 0;
+}
+
+.filter-category[open] summary {
+  margin-bottom: 0.5rem;
+}
