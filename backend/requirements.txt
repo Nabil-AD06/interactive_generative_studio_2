@@ -11,6 +11,7 @@ numpy>=1.21.0
 pandas>=1.3.0
 matplotlib>=3.5.0
 seaborn>=0.11.0
+plotly
 
 # Audio Processing (Optional but recommended)
 pydub>=0.25.0
