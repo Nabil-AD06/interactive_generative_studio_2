@@ -1,0 +1,202 @@
+/* ==================== 3D Hero ==================== */
+.hero-3d-wrapper {
+  position: relative;
+  width: 100%;
+  height: 85vh;
+  min-height: 500px;
+  max-height: 800px;
+  margin: -2.5rem -2.5rem 2.5rem;
+  width: calc(100% + 5rem);
+  overflow: hidden;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+#hero-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-3d-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg,
+    rgba(5, 10, 20, 0.3) 0%,
+    rgba(5, 10, 20, 0.5) 50%,
+    rgba(5, 10, 20, 0.85) 100%);
+}
+
+.hero-3d-content {
+  text-align: center;
+  max-width: 800px;
+  padding: 2rem;
+}
+
+.hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  padding: 0.4rem 1.2rem;
+  border-radius: var(--radius-full);
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.8s ease-out both;
+}
+
+.hero-3d-title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  margin-bottom: 1.25rem;
+  background: linear-gradient(135deg, #34d399 0%, #5eead4 30%, #fbbf24 70%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: slideInUp 0.8s 0.2s ease-out both;
+  text-wrap: balance;
+}
+
+.hero-3d-subtitle {
+  font-size: 1.35rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-weight: 400;
+  line-height: 1.7;
+  margin-bottom: 2.5rem;
+  text-wrap: balance;
+  animation: slideInUp 0.8s 0.35s ease-out both;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  animation: slideInUp 0.8s 0.5s ease-out both;
+}
+
+.hero-actions .btn {
+  font-size: 1.05rem;
+  padding: 0.9rem 2rem;
+}
+
+.hero-actions .btn-outline {
+  color: white;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.hero-actions .btn-outline:hover {
+  background: white;
+  color: var(--gray-900);
+  border-color: white;
+  box-shadow: 0 8px 30px rgba(255, 255, 255, 0.2);
+}
+
+/* Scroll Indicator */
+.hero-scroll-indicator {
+  margin-top: 3rem;
+  animation: fadeIn 1s 0.8s ease-out both;
+}
+
+.scroll-mouse {
+  display: block;
+  width: 26px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 14px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.scroll-dot {
+  display: block;
+  width: 4px;
+  height: 8px;
+  background: white;
+  border-radius: 3px;
+  margin: 7px auto 0;
+  animation: scrollDot 1.8s ease-in-out infinite;
+}
+
+@keyframes scrollDot {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(14px); opacity: 0; }
+}
+
+/* ==================== Hero Section (below 3D) ==================== */
+.hero-section {
+  padding: 0;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 0;
+}
+
+/* ==================== Responsive ==================== */
+@media (max-width: 768px) {
+  .hero-3d-wrapper {
+    height: 70vh;
+    min-height: 400px;
+    margin: -1.25rem -1.25rem 1.5rem;
+    width: calc(100% + 2.5rem);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
+
+  .hero-3d-title {
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+  }
+
+  .hero-3d-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .hero-actions {
+    gap: 0.75rem;
+  }
+
+  .hero-actions .btn {
+    font-size: 0.95rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .hero-grid {
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-3d-wrapper {
+    height: 65vh;
+    min-height: 350px;
+  }
+
+  .hero-3d-title {
+    font-size: 2rem;
+  }
+
+  .hero-3d-subtitle {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

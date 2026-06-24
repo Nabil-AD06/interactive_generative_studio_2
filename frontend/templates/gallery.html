@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/gallery.css') }}">
+{% endblock %}
+
+{% block content %}
+<h1>🎭 Creative Gallery</h1>
+
+<p style="text-align:center;color:var(--gray-700);margin-bottom:2.5rem;font-size:1.2rem;">
+  Browse your creations and explore example artworks
+</p>
+
+{% if all_images|length > 0 %}
+<div class="gallery-section">
+  <h2 style="color:var(--primary-500);margin:2rem 0 1.5rem;">
+    📸 Your Creations ({{ all_images|length }})
+  </h2>
+
+  <div class="gallery-filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="generated">🌀 Generated</button>
+    <button class="filter-btn" data-filter="processed">🖼️ Processed</button>
+    <button class="filter-btn" data-filter="styled">🎨 Style Transfer</button>
+  </div>
+
+  <div class="thumbnails-grid">
+    {% for image in all_images %}
+    <div class="thumbnail-card" data-type="{{ image.type }}">
+      <a href="{{ url_for('media_file', filename=image.path) }}"
+         target="_blank"
+         class="thumbnail-link">
+        <div class="thumbnail-image"
+             style="--bg-url: url('{{ url_for('media_file', filename=image.path) }}');">
+        </div>
+        <div class="thumbnail-overlay">
+          <span class="view-text">🔍 View Full Size</span>
+        </div>
+      </a>
+      <div class="thumbnail-info">
+        <p class="thumbnail-title">
+          {{ image.filename[:30] }}{% if image.filename|length > 30 %}...{% endif %}
+        </p>
+        <p class="thumbnail-type">
+          {% if image.type == 'generated' %}🌀 Generated Art
+          {% elif image.type == 'processed' %}🖼️ Processed Image
+          {% elif image.type == 'styled' %}🎨 Style Transfer
+          {% endif %}
+        </p>
+        <div class="thumbnail-actions">
+          <a href="{{ url_for('download', filename=image.filename) }}" class="action-btn">💾 Download</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<hr style="margin:3rem 0;border:none;border-top:2px solid var(--gray-300);">
+{% endif %}
+
+<div class="gallery-section">
+  <h2 style="color:var(--primary-500);margin:2rem 0 1.5rem;">✨ Example Artworks</h2>
+  <div class="thumbnails-grid">
+    <div class="example-card">
+      <div class="example-placeholder" style="background:linear-gradient(135deg,var(--primary-500),var(--secondary-500));">
+        <div class="example-icon">🌀</div>
+        <p class="example-title">Geometric Art</p>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="example-placeholder" style="background:linear-gradient(135deg,#f093fb,#f5576c);">
+        <div class="example-icon">🌳</div>
+        <p class="example-title">Fractal Tree</p>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="example-placeholder" style="background:linear-gradient(135deg,#4facfe,#00f2fe);">
+        <div class="example-icon">📊</div>
+        <p class="example-title">Data Wave</p>
+      </div>
+    </div>
+    <div class="example-card">
+      <div class="example-placeholder" style="background:linear-gradient(135deg,#43e97b,#38f9d7);">
+        <div class="example-icon">🔥</div>
+        <p class="example-title">Heatmap</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if all_images|length == 0 %}
+<div class="empty-box">
+  <p class="empty-title">📸 No Creations Yet!</p>
+  <p class="empty-sub">Start creating artworks to see them here</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/pages/gallery.js') }}"></script>
+{% endblock %}

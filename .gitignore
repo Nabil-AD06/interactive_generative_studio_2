@@ -1,0 +1,46 @@
+# ========== Python ==========
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+.env/
+
+# ========== IDE & Editors ==========
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ========== Flask / Project ==========
+instance/
+*.db
+*.sqlite
+
+# ========== User Content (not committed) ==========
+media/
+frontend/static/plots/
+
+# ========== Downloaded binaries (install via install_ffmpeg.bat) ==========
+backend/*.exe
+
+# ========== Logs ==========
+*.log
+
+# ========== Visual Studio (legacy) ==========
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
