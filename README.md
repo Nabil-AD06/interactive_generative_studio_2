@@ -5,7 +5,8 @@ A comprehensive web-based creative platform built with Python and Flask that com
 ![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)
 ![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)
 
----
+
+--- =================================================================================================
 
 ## 🚀 Quick Start
 
@@ -48,7 +49,8 @@ python3 backend/app.py
 
 → **Ouvrir http://127.0.0.1:5000**
 
----
+
+--- =================================================================================================
 
 ## 📋 Prérequis
 
